@@ -1,0 +1,70 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Vehicle base class & getters
+      id: vehicle-base-class-getters
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Vehicle base class & getters
+        setup-command: ''
+        command: make test_A
+        timeout: 10
+        max-score: 20
+    - name: refuel() logic
+      id: refuel-logic
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: refuel() logic
+        setup-command: ''
+        command: make test_B
+        timeout: 10
+        max-score: 15
+    - name: Car constructor & describe()
+      id: car-constructor-describe
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Car constructor & describe()
+        setup-command: ''
+        command: make test_C
+        timeout: 10
+        max-score: 20
+    - name: Truck constructor & describe()
+      id: truck-constructor-describe
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Truck constructor & describe()
+        setup-command: ''
+        command: make test_D
+        timeout: 10
+        max-score: 20
+    - name: Polymorphism via base pointer
+      id: polymorphism-via-base-pointer
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Polymorphism via base pointer
+        setup-command: ''
+        command: make test_E
+        timeout: 10
+        max-score: 25
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        VEHICLE-BASE-CLASS-GETTERS_RESULTS: "${{steps.vehicle-base-class-getters.outputs.result}}"
+        REFUEL-LOGIC_RESULTS: "${{steps.refuel-logic.outputs.result}}"
+        CAR-CONSTRUCTOR-DESCRIBE_RESULTS: "${{steps.car-constructor-describe.outputs.result}}"
+        TRUCK-CONSTRUCTOR-DESCRIBE_RESULTS: "${{steps.truck-constructor-describe.outputs.result}}"
+        POLYMORPHISM-VIA-BASE-POINTER_RESULTS: "${{steps.polymorphism-via-base-pointer.outputs.result}}"
+      with:
+        runners: vehicle-base-class-getters,refuel-logic,car-constructor-describe,truck-constructor-describe,polymorphism-via-base-pointer

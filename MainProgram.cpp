@@ -144,7 +144,7 @@ std::string Truck::describe() const {
    std::ostringstream oss;
    oss << "Truck: " << make << " (" << year << "), payload: "
 << payloadTons << "t, fuel: " << fuelLevel << "%";
-   return oss.str()
+   return oss.str();
 }
 // ================================================================
 // MAIN
